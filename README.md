@@ -1,5 +1,7 @@
 # deploy_dir v0.1.0
 
+[![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
+
 Read the files under the given directory and outputs the source code for Deno
 Deploy which responds with the contents of the given directory.
 
