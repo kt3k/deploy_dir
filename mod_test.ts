@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.97.0/testing/asserts.ts";
-import { readDirCreateSource } from "./mod.ts";
+import { getMediaType, readDirCreateSource } from "./mod.ts";
 
 Deno.test("readDirCreateSource", async () => {
   assertEquals(
@@ -62,4 +62,21 @@ addEventListener("fetch", (e) => {
 });
 `.trim(),
   );
+});
+
+Deno.test("getMediaType", () => {
+  assertEquals(getMediaType("README.md"), "text/markdown");
+  assertEquals(getMediaType("index.html"), "text/html");
+  assertEquals(getMediaType("inde.htm"), "text/html");
+  assertEquals(getMediaType("package.json"), "application/json");
+  assertEquals(getMediaType("foo.txt"), "text/plain");
+  assertEquals(getMediaType("foo.ts"), "text/typescript");
+  assertEquals(getMediaType("Component.tsx"), "text/tsx");
+  assertEquals(getMediaType("script.js"), "application/javascript");
+  assertEquals(getMediaType("Component.jsx"), "text/jsx");
+  assertEquals(getMediaType("archive.tar.gz"), "application/gzip");
+  assertEquals(getMediaType("style.css"), "text/css");
+  assertEquals(getMediaType("lib.wasm"), "application/wasm");
+  assertEquals(getMediaType("mod.mjs"), "application/javascript");
+  assertEquals(getMediaType("logo.svg"), "image/svg+xml");
 });
