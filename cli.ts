@@ -3,7 +3,7 @@ import { red } from "https://deno.land/std@0.97.0/fmt/colors.ts";
 import { readDirCreateSource } from "./mod.ts";
 
 const NAME = "deploy_dir";
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 
 function usage() {
   console.log(`
