@@ -26,13 +26,14 @@ The output source code typically looks like the below:
 
 ```ts
 const dirData: Record<string, Uint8Array> = {};
-dirData["/bar.ts"] = Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0));
-dirData["/foo.txt"] = Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0));
+dirData["/bar.ts"] = [Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0)), "text/typescript"];
+dirData["/foo.txt"] = [Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0)), "text/plain"];
 addEventListener("fetch", (e) => {
   const { pathname } = new URL(e.request.url);
   const data = dirData[pathname];
   if (data) {
-    e.respondWith(new Response(data));
+    const [bytes, mediaType] = data;
+    e.respondWith(new Response(bytes, { headers: { "content-type": mediaType } }));
     return;
   }
   e.respondWith(new Response("404 Not Found", { status: 404 }));
