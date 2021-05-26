@@ -2,13 +2,17 @@
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
 
-`deploy_dir` is a CLI command which reads the contents of a directory and
-package them as source code for Deno Deploy or CloudFlare workers.
+`deploy_dir` is a CLI tool for hosting static web sites in
+[Deno Deploy](https://deno.com/deploy).
 
-Useful for hosting small static web site in Deno Deploy or CloudFlare Workers.
+`deploy_dir` reads the contents of a directory and package them as source code
+for Deno Deploy or CloudFlare workers.
 
-This tool is not suitable for hosting large static contents like videos, audios,
-high-res images, etc.
+Note: This tool is not suitable for hosting large static contents like videos,
+audios, high-res images, etc.
+
+Bonus: This tool also works for
+[CloudFlare Workers](https://workers.cloudflare.com/) if you pass `--js` option.
 
 # Install
 
