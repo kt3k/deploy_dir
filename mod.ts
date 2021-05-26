@@ -11,6 +11,7 @@ export async function readDirCreateSource(
     root = "/" + root;
   }
   buf.push("const dirData: Record<string, Uint8Array> = {};");
+  const items: [string, string, string][] = [];
   for await (const { path } of walk(dir)) {
     const stat = await Deno.lstat(path);
     if (stat.isDirectory) {
@@ -20,6 +21,17 @@ export async function readDirCreateSource(
     const type = getMediaType(name);
     const contents = await Deno.readFile(path);
     const base64 = encode(contents);
+    items.push([name, base64, type]);
+  }
+  items.sort(([name0], [name1]) => {
+    if (name0 < name1) {
+      return -1;
+    } else if (name0 > name1) {
+      return 1;
+    }
+    return 0;
+  });
+  for (const [name, base64, type] of items) {
     buf.push(
       `dirData[${
         JSON.stringify(name)
