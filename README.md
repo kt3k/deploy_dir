@@ -22,7 +22,7 @@ deploy_dir dist -o deploy.ts
 This command reads the files under `./dist/` directory and writes the source
 code for [Deno Deploy](https://deno.com/deploy) to `./deploy.ts`
 
-You can check the behavior of this deployment by using [deployctl]() command
+You can check the behavior of this deployment by using [deployctl](https://deno.land/x/deploy) command
 locally:
 
 ```
