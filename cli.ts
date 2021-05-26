@@ -7,7 +7,7 @@ const VERSION = "0.1.1";
 
 function usage() {
   console.log(`
-Usage: ${NAME} <dir> [-h][-v][-o <filename>][-r <path>] 
+Usage: ${NAME} <dir> [-h][-v][-o <filename>][-r <path>]
 
 Read the files under the given directory and outputs the source code for Deno Deploy
 which serves the contents of the given directory.

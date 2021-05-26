@@ -45,8 +45,8 @@ Read the files under the given directory and outputs the source code for Deno De
 which serves the contents of the given directory.
 
 Options:
-  -o, --output <filename>     Specifies the output filename. Default is 'deploy.ts'.
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
+  -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.
