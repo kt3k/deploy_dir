@@ -5,11 +5,15 @@ Deno.test("readDirCreateSource", async () => {
   assertEquals(
     await readDirCreateSource("testdata"),
     `
-const dirData: Record<string, Uint8Array> = {};
+const dirData: Record<string, [Uint8Array, string]> = {};
 dirData["/bar.ts"] = [Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0)), "text/typescript"];
 dirData["/foo.txt"] = [Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0)), "text/plain"];
+dirData["/index.html"] = [Uint8Array.from(atob("SGVsbG8hCg=="), (c) => c.charCodeAt(0)), "text/html"];
 addEventListener("fetch", (e) => {
-  const { pathname } = new URL(e.request.url);
+  let { pathname } = new URL(e.request.url);
+  if (pathname.endsWith("/")) {
+    pathname += "index.html";
+  }
   const data = dirData[pathname];
   if (data) {
     const [bytes, mediaType] = data;
@@ -26,11 +30,15 @@ Deno.test("readDirCreateSource with root", async () => {
   assertEquals(
     await readDirCreateSource("testdata", "/root"),
     `
-const dirData: Record<string, Uint8Array> = {};
+const dirData: Record<string, [Uint8Array, string]> = {};
 dirData["/root/bar.ts"] = [Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0)), "text/typescript"];
 dirData["/root/foo.txt"] = [Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0)), "text/plain"];
+dirData["/root/index.html"] = [Uint8Array.from(atob("SGVsbG8hCg=="), (c) => c.charCodeAt(0)), "text/html"];
 addEventListener("fetch", (e) => {
-  const { pathname } = new URL(e.request.url);
+  let { pathname } = new URL(e.request.url);
+  if (pathname.endsWith("/")) {
+    pathname += "index.html";
+  }
   const data = dirData[pathname];
   if (data) {
     const [bytes, mediaType] = data;
@@ -47,11 +55,15 @@ Deno.test("readDirCreateSource with root 2", async () => {
   assertEquals(
     await readDirCreateSource("testdata", "root"),
     `
-const dirData: Record<string, Uint8Array> = {};
+const dirData: Record<string, [Uint8Array, string]> = {};
 dirData["/root/bar.ts"] = [Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0)), "text/typescript"];
 dirData["/root/foo.txt"] = [Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0)), "text/plain"];
+dirData["/root/index.html"] = [Uint8Array.from(atob("SGVsbG8hCg=="), (c) => c.charCodeAt(0)), "text/html"];
 addEventListener("fetch", (e) => {
-  const { pathname } = new URL(e.request.url);
+  let { pathname } = new URL(e.request.url);
+  if (pathname.endsWith("/")) {
+    pathname += "index.html";
+  }
   const data = dirData[pathname];
   if (data) {
     const [bytes, mediaType] = data;

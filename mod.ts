@@ -2,6 +2,10 @@ import { walk } from "https://deno.land/std@0.97.0/fs/walk.ts";
 import { encode } from "https://deno.land/std@0.97.0/encoding/base64.ts";
 import { join, relative } from "https://deno.land/std@0.97.0/path/mod.ts";
 
+/**
+ * Reads the contents of the given directory and creates the source code for Deno Deploy,
+ * which serves the files in that directory
+ */
 export async function readDirCreateSource(
   dir: string,
   root = "/",
@@ -10,7 +14,7 @@ export async function readDirCreateSource(
   if (!root.startsWith("/")) {
     root = "/" + root;
   }
-  buf.push("const dirData: Record<string, Uint8Array> = {};");
+  buf.push("const dirData: Record<string, [Uint8Array, string]> = {};");
   const items: [string, string, string][] = [];
   for await (const { path } of walk(dir)) {
     const stat = await Deno.lstat(path);
@@ -40,7 +44,10 @@ export async function readDirCreateSource(
   }
   buf.push(`
 addEventListener("fetch", (e) => {
-  const { pathname } = new URL(e.request.url);
+  let { pathname } = new URL(e.request.url);
+  if (pathname.endsWith("/")) {
+    pathname += "index.html";
+  }
   const data = dirData[pathname];
   if (data) {
     const [bytes, mediaType] = data;
