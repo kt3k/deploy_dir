@@ -1,4 +1,4 @@
-# deploy_dir v0.1.0
+# deploy_dir v0.1.1
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
 
@@ -10,7 +10,7 @@ Deploy which responds with the contents of the given directory.
 Deno >= 1.10 is recommended.
 
 ```
-deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.1.0/cli.ts
+deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.1.1/cli.ts
 ```
 
 # Usage
