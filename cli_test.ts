@@ -19,7 +19,7 @@ Deno.test("deploy_dir - target dir is not given", async () => {
 
 Deno.test("deploy_dir testdata", async () => {
   const tempdir = await Deno.makeTempDir();
-  const code = await denoRun([resolve("cli.ts"), resolve("testdata")], { cwd: tempdir });
+  const code = await denoRun([resolve("cli.ts"), resolve("testdata"), "-o", "deploy.ts"], { cwd: tempdir });
   assertEquals(code, 0);
   const source = await Deno.readTextFile(join(tempdir, "deploy.ts"));
   assertStringIncludes(source, "addEventListener");
