@@ -1,4 +1,7 @@
-import { assertEquals, assertStringIncludes } from "https://deno.land/std@0.97.0/testing/asserts.ts";
+import {
+  assertEquals,
+  assertStringIncludes,
+} from "https://deno.land/std@0.97.0/testing/asserts.ts";
 import { join, resolve } from "https://deno.land/std@0.97.0/path/mod.ts";
 import { main } from "./cli.ts";
 
@@ -19,7 +22,12 @@ Deno.test("deploy_dir - target dir is not given", async () => {
 
 Deno.test("deploy_dir testdata", async () => {
   const tempdir = await Deno.makeTempDir();
-  const code = await denoRun([resolve("cli.ts"), resolve("testdata"), "-o", "deploy.ts"], { cwd: tempdir });
+  const code = await denoRun([
+    resolve("cli.ts"),
+    resolve("testdata"),
+    "-o",
+    "deploy.ts",
+  ], { cwd: tempdir });
   assertEquals(code, 0);
   const source = await Deno.readTextFile(join(tempdir, "deploy.ts"));
   assertStringIncludes(source, "addEventListener");
@@ -27,12 +35,15 @@ Deno.test("deploy_dir testdata", async () => {
   assertStringIncludes(source, "bar.ts");
 });
 
-async function denoRun(args: string[], { cwd }: { cwd?: string } = {}): Promise<number> {
+async function denoRun(
+  args: string[],
+  { cwd }: { cwd?: string } = {},
+): Promise<number> {
   const p = Deno.run({
     cmd: [Deno.execPath(), "run", "-A", ...args],
     cwd,
   });
-  const status = await p.status()
+  const status = await p.status();
   p.close();
   return status.code;
 }

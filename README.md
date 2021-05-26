@@ -22,13 +22,15 @@ deploy_dir dist -o deploy.ts
 This command reads the files under `./dist/` directory and writes the source
 code for [Deno Deploy](https://deno.com/deploy) to `./deploy.ts`
 
-You can check the behavior of this deployment by using [deployctl]() command locally:
+You can check the behavior of this deployment by using [deployctl]() command
+locally:
 
 ```
 deployctl run deploy.ts
 ```
 
-This serves the contents of the source directory such as http://localhost:8080/foo.txt , http://localhost:8080/bar.ts , etc
+This serves the contents of the source directory such as
+http://localhost:8080/foo.txt , http://localhost:8080/bar.ts , etc
 
 # CLI usage
 
@@ -53,22 +55,32 @@ Options:
 The output source typically looks like the below:
 
 ```ts
-const dirData: Record<string, Uint8Array> = {}; 
-dirData["/bar.ts"] = [Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0)), "text/typescript"];
-dirData["/foo.txt"] = [Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0)), "text/plain"];
+const dirData: Record<string, Uint8Array> = {};
+dirData["/bar.ts"] = [
+  Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0)),
+  "text/typescript",
+];
+dirData["/foo.txt"] = [
+  Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0)),
+  "text/plain",
+];
 addEventListener("fetch", (e) => {
   const { pathname } = new URL(e.request.url);
   const data = dirData[pathname];
   if (data) {
     const [bytes, mediaType] = data;
-    e.respondWith(new Response(bytes, { headers: { "content-type": mediaType } }));
+    e.respondWith(
+      new Response(bytes, { headers: { "content-type": mediaType } }),
+    );
     return;
   }
   e.respondWith(new Response("404 Not Found", { status: 404 }));
 });
 ```
 
-You can extend this deploy source by removing the last line `e.respondWith(new Response("404 Not Found", { status: 404 }));` and replace it with your own handler.
+You can extend this deploy source by removing the last line
+`e.respondWith(new Response("404 Not Found", { status: 404 }));` and replace it
+with your own handler.
 
 # License
 
