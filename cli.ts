@@ -15,7 +15,7 @@ which serves the contents of the given directory.
 Options:
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
-  --js                        Output source code as plain JavaScript. Default is false.
+  --js                        Output source code as plain JavaScript. Default is false. Set this true if you want to deploy to CloudFlare Workers.
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.

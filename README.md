@@ -34,14 +34,15 @@ This command reads the files under `./dist/` directory and writes the source
 code for [Deno Deploy](https://deno.com/deploy) to `./deploy.ts`
 
 You can check the behavior of this deployment by using
-[deployctl](https://deno.land/x/deploy) command locally:
+[deployctl](https://deno.land/x/deploy) command:
 
 ```
 deployctl run deploy.ts
 ```
 
 This serves the contents of the source directory such as
-http://localhost:8080/foo.txt , http://localhost:8080/bar.ts , etc
+http://localhost:8080/foo.txt , http://localhost:8080/bar.ts , etc (Note: The
+directory index path maps to `dir/index.html` automatically)
 
 # CLI usage
 
@@ -56,7 +57,7 @@ which serves the contents of the given directory.
 Options:
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
-  --js                        Output source code as plain JavaScript. Default is false.
+  --js                        Output source code as plain JavaScript. Default is false. Set this true if you want to deploy to CloudFlare Workers.
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.
