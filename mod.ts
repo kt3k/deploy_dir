@@ -9,12 +9,17 @@ import { join, relative } from "https://deno.land/std@0.97.0/path/mod.ts";
 export async function readDirCreateSource(
   dir: string,
   root = "/",
+  opts: { toJavaScript?: boolean } = {},
 ): Promise<string> {
   const buf: string[] = [];
   if (!root.startsWith("/")) {
     root = "/" + root;
   }
-  buf.push("const dirData: Record<string, [Uint8Array, string]> = {};");
+  if (opts?.toJavaScript) {
+    buf.push("const dirData = {};");
+  } else {
+    buf.push("const dirData: Record<string, [Uint8Array, string]> = {};");
+  }
   const items: [string, string, string][] = [];
   for await (const { path } of walk(dir)) {
     const stat = await Deno.lstat(path);

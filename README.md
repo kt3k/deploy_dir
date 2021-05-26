@@ -2,8 +2,13 @@
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
 
-Read the files under the given directory and outputs the source code for Deno
-Deploy which responds with the contents of the given directory.
+`deploy_dir` is a CLI command which reads the contents of a directory and
+package them as source code for Deno Deploy or CloudFlare workers.
+
+Useful for hosting small static web site in Deno Deploy or CloufFlare Workers.
+
+This tool is not suitable for hosting large static contents like videos, audios,
+high-res images, etc.
 
 # Install
 
@@ -39,7 +44,7 @@ http://localhost:8080/foo.txt , http://localhost:8080/bar.ts , etc
 `deploy_dir` supports the following options:
 
 ```
-Usage: deploy_dir <dir> [-h][-v][-o <filename>][-r <path>]
+Usage: deploy_dir <dir> [-h][-v][-o <filename>][--js][-r <path>]
 
 Read the files under the given directory and outputs the source code for Deno Deploy
 which serves the contents of the given directory.
@@ -47,9 +52,15 @@ which serves the contents of the given directory.
 Options:
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
+  --js                        Output source code as plain JavaScript. Default is false.
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.
+
+Example:
+  deploy_dir dist/ -o deploy.ts
+                              Reads the files under dist/ directory and outputs 'deploy.ts' file which
+                              serves the contents under dist/ as deno deploy worker.
 ```
 
 # Internals
@@ -80,7 +91,7 @@ addEventListener("fetch", (e) => {
 });
 ```
 
-You can extend this deploy source by removing the last line
+You can extend this deploy source code by removing the last line
 `e.respondWith(new Response("404 Not Found", { status: 404 }));` and replace it
 with your own handler.
 

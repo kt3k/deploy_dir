@@ -26,6 +26,31 @@ addEventListener("fetch", (e) => {
   );
 });
 
+Deno.test("readDirCreateSource - toJavaScript", async () => {
+  assertEquals(
+    await readDirCreateSource("testdata", undefined, { toJavaScript: true }),
+    `
+const dirData = {};
+dirData["/bar.ts"] = [Uint8Array.from(atob("Y29uc29sZS5sb2coImJhciIpOwo="), (c) => c.charCodeAt(0)), "text/typescript"];
+dirData["/foo.txt"] = [Uint8Array.from(atob("Zm9vCg=="), (c) => c.charCodeAt(0)), "text/plain"];
+dirData["/index.html"] = [Uint8Array.from(atob("SGVsbG8hCg=="), (c) => c.charCodeAt(0)), "text/html"];
+addEventListener("fetch", (e) => {
+  let { pathname } = new URL(e.request.url);
+  if (pathname.endsWith("/")) {
+    pathname += "index.html";
+  }
+  const data = dirData[pathname];
+  if (data) {
+    const [bytes, mediaType] = data;
+    e.respondWith(new Response(bytes, { headers: { "content-type": mediaType } }));
+    return;
+  }
+  e.respondWith(new Response("404 Not Found", { status: 404 }));
+});
+`.trim(),
+  );
+});
+
 Deno.test("readDirCreateSource with root", async () => {
   assertEquals(
     await readDirCreateSource("testdata", "/root"),

@@ -7,7 +7,7 @@ const VERSION = "0.1.2";
 
 function usage() {
   console.log(`
-Usage: ${NAME} <dir> [-h][-v][-o <filename>][-r <path>]
+Usage: ${NAME} <dir> [-h][-v][-o <filename>][--js][-r <path>]
 
 Read the files under the given directory and outputs the source code for Deno Deploy
 which serves the contents of the given directory.
@@ -15,6 +15,7 @@ which serves the contents of the given directory.
 Options:
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
+  --js                        Output source code as plain JavaScript. Default is false.
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.
@@ -32,6 +33,7 @@ type CliArgs = {
   help: boolean;
   root: string;
   output: string;
+  js: boolean;
   yes: boolean;
 };
 
@@ -41,10 +43,11 @@ export async function main(cliArgs: string[]) {
     help,
     root = "/",
     output,
+    js,
     yes,
     _: args,
   } = parse(cliArgs, {
-    boolean: ["help", "version", "yes"],
+    boolean: ["help", "version", "js", "yes"],
     string: ["root", "output"],
     alias: {
       h: "help",
@@ -73,7 +76,7 @@ export async function main(cliArgs: string[]) {
     return 1;
   }
 
-  const source = await readDirCreateSource(dir, root);
+  const source = await readDirCreateSource(dir, root, { toJavaScript: js });
   if (!output) {
     console.log(source);
     return 0;
