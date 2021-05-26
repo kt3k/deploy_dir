@@ -5,7 +5,7 @@
 `deploy_dir` is a CLI command which reads the contents of a directory and
 package them as source code for Deno Deploy or CloudFlare workers.
 
-Useful for hosting small static web site in Deno Deploy or CloufFlare Workers.
+Useful for hosting small static web site in Deno Deploy or CloudFlare Workers.
 
 This tool is not suitable for hosting large static contents like videos, audios,
 high-res images, etc.
