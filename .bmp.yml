@@ -1,0 +1,7 @@
+version: 0.0.1
+commit: 'chore: bump to v%.%.%'
+files:
+  README.md:
+    - deploy_dir v%.%.%
+    - https://deno.land/x/deploy_dir@v%.%.%/cli.ts
+  cli.ts: const VERSION = "%.%.%";
