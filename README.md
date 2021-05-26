@@ -1,4 +1,4 @@
-# deploy_dir v0.0.1
+# deploy_dir v0.1.0
 
 Read the files under the given directory and outputs the source code for Deno
 Deploy which respond with the contents of the given directory.
@@ -8,7 +8,7 @@ Deploy which respond with the contents of the given directory.
 Deno >= 1.10 is recommended.
 
 ```
-deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.0.1/cli.ts
+deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.1.0/cli.ts
 ```
 
 # Usage
