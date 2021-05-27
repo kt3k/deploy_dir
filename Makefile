@@ -4,6 +4,9 @@ deploy.ts:
 test:
 	deno test -A
 
+fmt:
+	deno fmt
+
 serve:
 	make deploy.ts
 	deployctl run deploy.ts
