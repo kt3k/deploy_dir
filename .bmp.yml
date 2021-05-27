@@ -5,3 +5,4 @@ files:
     - deploy_dir v%.%.%
     - 'https://deno.land/x/deploy_dir@v%.%.%/cli.ts'
   cli.ts: const VERSION = "%.%.%";
+  mod.ts: https://deno.land/x/deploy_dir@v%.%.%
