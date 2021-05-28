@@ -26,6 +26,9 @@ export async function readDirCreateSource(
       'import { basicAuth } from "https://deno.land/x/basic_auth@v1.0.0/mod.ts";',
     );
   }
+  buf.push(
+    'import { decode } from "https://deno.land/std@0.97.0/encoding/base64.ts";',
+  );
   buf.push('console.log("init");');
   if (opts?.toJavaScript) {
     buf.push("const dirData = {};");
@@ -54,9 +57,7 @@ export async function readDirCreateSource(
   });
   for (const [name, base64, type] of items) {
     buf.push(
-      `dirData[${
-        JSON.stringify(name)
-      }] = [Uint8Array.from(atob("${base64}"), (c) => c.charCodeAt(0)), "${type}"];`,
+      `dirData[${JSON.stringify(name)}] = [decode("${base64}"), "${type}"];`,
     );
   }
   buf.push('addEventListener("fetch", (e) => {');
