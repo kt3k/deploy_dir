@@ -6,7 +6,7 @@
 [Deno Deploy](https://deno.com/deploy).
 
 `deploy_dir` reads the contents of a directory and package them as source code
-for Deno Deploy or Cloudflare workers.
+for Deno Deploy or Cloudflare Workers.
 
 Note: This tool is not suitable for hosting large static contents like videos,
 audios, high-res images, etc.
