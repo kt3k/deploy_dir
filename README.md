@@ -6,13 +6,10 @@
 [Deno Deploy](https://deno.com/deploy).
 
 `deploy_dir` reads the contents of a directory and package them as source code
-for Deno Deploy or Cloudflare Workers.
+for Deno Deploy.
 
 Note: This tool is not suitable for hosting large static contents like videos,
 audios, high-res images, etc.
-
-Bonus: This tool also works for
-[Cloudflare Workers](https://workers.cloudflare.com/) if you pass `--js` option.
 
 # Install
 
@@ -57,7 +54,7 @@ which serves the contents of the given directory.
 Options:
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
-  --js                        Output source code as plain JavaScript. Default is false. Set this true if you want to deploy to Cloudflare Workers.
+  --js                        Output source code as plain JavaScript. Default is false.
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.
