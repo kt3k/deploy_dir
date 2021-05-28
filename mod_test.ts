@@ -6,7 +6,9 @@ import {
 import { getMediaType, readDirCreateSource } from "./mod.ts";
 
 Deno.test("readDirCreateSource", async () => {
-  const source = await readDirCreateSource("testdata", undefined, { gzipTimestamp: 0 });
+  const source = await readDirCreateSource("testdata", undefined, {
+    gzipTimestamp: 0,
+  });
   assertEquals(
     source,
     `
