@@ -1,4 +1,4 @@
-# deploy_dir v0.1.6
+# deploy_dir v0.2.0
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
 
@@ -19,7 +19,7 @@ Bonus: This tool also works for
 Deno >= 1.10 is recommended.
 
 ```
-deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.1.6/cli.ts
+deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.2.0/cli.ts
 ```
 
 # Usage
