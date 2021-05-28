@@ -1,6 +1,7 @@
 import { walk } from "https://deno.land/std@0.97.0/fs/walk.ts";
 import { encode } from "https://deno.land/std@0.97.0/encoding/base64.ts";
 import { join, relative } from "https://deno.land/std@0.97.0/path/mod.ts";
+import { gzip } from "https://deno.land/x/compress@v0.3.8/gzip/gzip.ts";
 
 /**
  * Reads the contents of the given directory and creates the source code for Deno Deploy,
@@ -12,6 +13,7 @@ export async function readDirCreateSource(
   opts: {
     toJavaScript?: boolean;
     basicAuth?: string;
+    gzipTimestamp?: number;
   } = {},
 ): Promise<string> {
   const buf: string[] = [];
@@ -28,6 +30,7 @@ export async function readDirCreateSource(
   }
   buf.push(
     'import { decode } from "https://deno.land/std@0.97.0/encoding/base64.ts";',
+    'import { gunzip } from "https://raw.githubusercontent.com/kt3k/compress/bbe0a818d2acd399350b30036ff8772354b1c2df/gzip/gzip.ts";',
   );
   buf.push('console.log("init");');
   if (opts?.toJavaScript) {
@@ -44,7 +47,7 @@ export async function readDirCreateSource(
     const name = join(root, relative(dir, path));
     const type = getMediaType(name);
     const contents = await Deno.readFile(path);
-    const base64 = encode(contents);
+    const base64 = encode(gzip(contents, { timestamp: opts.gzipTimestamp }));
     items.push([name, base64, type]);
   }
   items.sort(([name0], [name1]) => {
@@ -89,7 +92,15 @@ export async function readDirCreateSource(
   }
   if (data) {
     const [bytes, mediaType] = data;
-    e.respondWith(new Response(bytes, { headers: { "content-type": mediaType } }));
+    const acceptsGzip = e.request.headers.get("accept-encoding")?.split(/[,;]\s*/).includes("gzip");
+    if (acceptsGzip) {
+      e.respondWith(new Response(bytes, { headers: {
+        "content-type": mediaType,
+        "content-encoding": "gzip",
+      } }));
+    } else {
+      e.respondWith(new Response(gunzip(bytes), { headers: { "content-type": mediaType } }));
+    }
     return;
   }
   e.respondWith(new Response("404 Not Found", { status: 404 }));
