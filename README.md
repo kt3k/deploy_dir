@@ -128,7 +128,12 @@ with your own handler.
 
 # Limitation
 
-If your generated script exceeds 5MB, your deployment will become very unstable. This is because Deno Deploy has [256MB memory limit](https://deno.com/deploy/docs/pricing-and-limits). In that case, we recommend using [proxying technique](https://deno.com/deploy/docs/serve-static-assets) for serving static web site.
+If your generated script exceeds 5MB, your deployment will become very unstable.
+This is because Deno Deploy has
+[256MB memory limit](https://deno.com/deploy/docs/pricing-and-limits). In that
+case, we recommend using
+[proxying technique](https://deno.com/deploy/docs/serve-static-assets) for
+serving static web site.
 
 # License
 
