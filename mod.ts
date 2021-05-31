@@ -47,7 +47,7 @@ export async function readDirCreateSource(
     const name = join(root, relative(dir, path));
     const type = getMediaType(name);
     const contents = await Deno.readFile(path);
-    const base64 = encode(gzip(contents, { timestamp: opts.gzipTimestamp }));
+    const base64 = encode(gzip(contents, { timestamp: opts.gzipTimestamp || 0 }));
     items.push([name, base64, type]);
   }
   items.sort(([name0], [name1]) => {
