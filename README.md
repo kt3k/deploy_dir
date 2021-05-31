@@ -1,4 +1,4 @@
-# deploy_dir v0.2.2
+# deploy_dir v0.2.3
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
 
@@ -16,7 +16,7 @@ audios, high-res images, etc.
 Deno >= 1.10 is recommended.
 
 ```
-deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.2.2/cli.ts
+deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.2.3/cli.ts
 ```
 
 # Usage
