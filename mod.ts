@@ -2,6 +2,7 @@ import { walk } from "https://deno.land/std@0.97.0/fs/walk.ts";
 import { encode } from "https://deno.land/std@0.97.0/encoding/base64.ts";
 import { join, relative } from "https://deno.land/std@0.97.0/path/mod.ts";
 import { gzip } from "https://deno.land/x/compress@v0.3.8/gzip/gzip.ts";
+import { createHash } from "https://deno.land/std@0.99.0/hash/mod.ts";
 
 /**
  * Reads the contents of the given directory and creates the source code for Deno Deploy,
@@ -36,7 +37,7 @@ export async function readDirCreateSource(
   if (opts?.toJavaScript) {
     buf.push("const dirData = {};");
   } else {
-    buf.push("const dirData: Record<string, [Uint8Array, string]> = {};");
+    buf.push("const dirData: Record<string, [Uint8Array, string, string]> = {};");
   }
   const items: [string, string, string][] = [];
   for await (const { path } of walk(dir)) {
@@ -61,8 +62,11 @@ export async function readDirCreateSource(
     return 0;
   });
   for (const [name, base64, type] of items) {
+    const hash = createHash("md5");
+    hash.update(base64);
+    const etag = hash.toString(); // returns 5fe084ee423ff7e0c7709e9437cee89dkkkkk
     buf.push(
-      `dirData[${JSON.stringify(name)}] = [decode("${base64}"), "${type}"];`,
+      `dirData[${JSON.stringify(name)}] = [decode("${base64}"), "${type}", '"${etag}"'];`,
     );
   }
   buf.push('addEventListener("fetch", (e) => {');
@@ -93,15 +97,20 @@ export async function readDirCreateSource(
     data = dirData[pathname + '.html'];
   }
   if (data) {
-    const [bytes, mediaType] = data;
+    const [bytes, mediaType, etag] = data;
     const acceptsGzip = e.request.headers.get("accept-encoding")?.split(/[,;]\s*/).includes("gzip");
+    if (e.request.headers.get("if-none-match") === etag) {
+      e.respondWith(new Response(null, { status: 304, statusText: "Not Modified" }));
+      return;
+    }
     if (acceptsGzip) {
       e.respondWith(new Response(bytes, { headers: {
+        etag,
         "content-type": mediaType,
         "content-encoding": "gzip",
       } }));
     } else {
-      e.respondWith(new Response(gunzip(bytes), { headers: { "content-type": mediaType } }));
+      e.respondWith(new Response(gunzip(bytes), { headers: { etag, "content-type": mediaType } }));
     }
     return;
   }
