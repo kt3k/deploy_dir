@@ -37,7 +37,9 @@ export async function readDirCreateSource(
   if (opts?.toJavaScript) {
     buf.push("const dirData = {};");
   } else {
-    buf.push("const dirData: Record<string, [Uint8Array, string, string]> = {};");
+    buf.push(
+      "const dirData: Record<string, [Uint8Array, string, string]> = {};",
+    );
   }
   const items: [string, string, string][] = [];
   for await (const { path } of walk(dir)) {
@@ -66,7 +68,9 @@ export async function readDirCreateSource(
     hash.update(base64);
     const etag = hash.toString(); // returns 5fe084ee423ff7e0c7709e9437cee89dkkkkk
     buf.push(
-      `dirData[${JSON.stringify(name)}] = [decode("${base64}"), "${type}", '"${etag}"'];`,
+      `dirData[${
+        JSON.stringify(name)
+      }] = [decode("${base64}"), "${type}", '"${etag}"'];`,
     );
   }
   buf.push('addEventListener("fetch", (e) => {');

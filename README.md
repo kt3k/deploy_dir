@@ -137,7 +137,7 @@ serving static web site.
 
 # History
 
-- 2021-06-17   v0.3.0   Add Etag Support.
+- 2021-06-17 v0.3.0 Add Etag Support.
 
 # License
 
