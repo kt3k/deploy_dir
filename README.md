@@ -16,7 +16,7 @@ audios, high-res images, etc.
 Deno >= 1.10 is recommended.
 
 ```
-deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.3.0/cli.ts
+deno install -f --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.3.0/cli.ts
 ```
 
 # Usage
@@ -24,17 +24,17 @@ deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v
 The basic usage of the CLI is:
 
 ```
-deploy_dir dist -o deploy.ts
+deploy_dir dist -o deploy.js
 ```
 
 This command reads the files under `./dist/` directory and writes the source
-code for [Deno Deploy](https://deno.com/deploy) to `./deploy.ts`
+code for [Deno Deploy](https://deno.com/deploy) to `./deploy.js`
 
 You can check the behavior of this deployment by using
 [deployctl](https://deno.land/x/deploy) command:
 
 ```
-deployctl run deploy.ts
+deployctl run deploy.js
 ```
 
 This serves the contents of the source directory such as
@@ -61,8 +61,8 @@ Options:
   -h, --help                  Shows the help message.
 
 Example:
-  deploy_dir dist/ -o deploy.ts
-                              Reads the files under dist/ directory and outputs 'deploy.ts' file which
+  deploy_dir dist/ -o deploy.js
+                              Reads the files under dist/ directory and outputs 'deploy.js' file which
                               serves the contents under dist/ as deno deploy worker.
 ```
 

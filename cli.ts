@@ -7,7 +7,7 @@ const VERSION = "0.3.0";
 
 function usage() {
   console.log(`
-Usage: ${NAME} <dir> [-h][-v][-o <filename>][--js][-r <path>]
+Usage: ${NAME} <dir> [-h][-v][-o <filename>][--ts][-r <path>]
 
 Read the files under the given directory and outputs the source code for Deno Deploy
 which serves the contents of the given directory.
@@ -15,7 +15,7 @@ which serves the contents of the given directory.
 Options:
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
-  --js                        Output source code as plain JavaScript. Default is false.
+  --ts                        Output source code as TypeScript. Default is false.
   --basic-auth <id:pw>        Performs basic authentication in the deployed site. The credentials are in the form of <user>:<password>
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
@@ -34,7 +34,7 @@ type CliArgs = {
   help: boolean;
   root: string;
   output: string;
-  js: boolean;
+  ts: boolean;
   "basic-auth": string;
   yes: boolean;
 };
@@ -45,12 +45,12 @@ export async function main(cliArgs: string[]) {
     help,
     root = "/",
     output,
-    js,
+    ts,
     "basic-auth": basicAuth,
     yes,
     _: args,
   } = parse(cliArgs, {
-    boolean: ["help", "version", "js", "yes"],
+    boolean: ["help", "version", "ts", "yes"],
     string: ["root", "output", "basic-auth"],
     alias: {
       h: "help",
@@ -80,7 +80,7 @@ export async function main(cliArgs: string[]) {
   }
 
   const source = await readDirCreateSource(dir, root, {
-    toJavaScript: js,
+    toJavaScript: !ts,
     basicAuth,
   });
   if (!output) {

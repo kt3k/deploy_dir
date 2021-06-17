@@ -1,5 +1,8 @@
 deploy.ts:
-	deno run -A cli.ts testdata -y -o deploy.ts
+	deno run -A cli.ts testdata -y -o deploy.ts --ts
+
+deploy.js:
+	deno run -A cli.ts testdata -y -o deploy.js
 
 test:
 	deno test -A
