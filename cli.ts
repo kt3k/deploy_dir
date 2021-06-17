@@ -4,7 +4,7 @@ import { readDirCreateSource } from "./mod.ts";
 import { parseCacheOption } from "./util.ts";
 
 const NAME = "deploy_dir";
-const VERSION = "0.3.1";
+const VERSION = "0.3.2";
 
 function usage() {
   console.log(`

@@ -1,4 +1,4 @@
-# deploy_dir v0.3.1
+# deploy_dir v0.3.2
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
 
@@ -16,7 +16,7 @@ audios, high-res images, etc.
 Deno >= 1.10 is recommended.
 
 ```
-deno install -f --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.3.1/cli.ts
+deno install -f --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.3.2/cli.ts
 ```
 
 # Usage
@@ -139,6 +139,7 @@ serving static web site.
 
 # History
 
+- 2021-06-17 v0.3.2 Add --cache option.
 - 2021-06-17 v0.3.1 The output defaults to JavaScript. Add `--ts` option.
 - 2021-06-17 v0.3.0 Add Etag Support.
 
