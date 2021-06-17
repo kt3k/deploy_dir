@@ -12,6 +12,7 @@ export async function readDirCreateSource(
   dir: string,
   root = "/",
   opts: {
+    cache?: Record<string, string>;
     toJavaScript?: boolean;
     basicAuth?: string;
     gzipTimestamp?: number;
@@ -38,7 +39,7 @@ export async function readDirCreateSource(
     buf.push("const dirData = {};");
   } else {
     buf.push(
-      "const dirData: Record<string, [Uint8Array, string, string]> = {};",
+      "const dirData: Record<string, [Uint8Array, string, string, string]> = {};",
     );
   }
   const items: [string, string, string][] = [];
@@ -66,11 +67,19 @@ export async function readDirCreateSource(
   for (const [name, base64, type] of items) {
     const hash = createHash("md5");
     hash.update(base64);
-    const etag = hash.toString(); // returns 5fe084ee423ff7e0c7709e9437cee89dkkkkk
+    const etag = hash.toString();
+    let cacheControl = "private";
+    if (opts.cache) {
+      for (const [path, c] of Object.entries(opts.cache)) {
+	if (name.startsWith(path)) {
+          cacheControl = c;
+	}
+      }
+    }
     buf.push(
       `dirData[${
         JSON.stringify(name)
-      }] = [decode("${base64}"), "${type}", '"${etag}"'];`,
+      }] = [decode("${base64}"), "${type}", '"${etag}"', "${cacheControl}"];`,
     );
   }
   buf.push('addEventListener("fetch", (e) => {');
@@ -101,7 +110,7 @@ export async function readDirCreateSource(
     data = dirData[pathname + '.html'];
   }
   if (data) {
-    const [bytes, mediaType, etag] = data;
+    const [bytes, mediaType, etag, cacheControl] = data;
     const acceptsGzip = e.request.headers.get("accept-encoding")?.split(/[,;]\s*/).includes("gzip");
     if (e.request.headers.get("if-none-match") === etag) {
       e.respondWith(new Response(null, { status: 304, statusText: "Not Modified" }));
@@ -110,11 +119,16 @@ export async function readDirCreateSource(
     if (acceptsGzip) {
       e.respondWith(new Response(bytes, { headers: {
         etag,
+	"cache-control": cacheControl,
         "content-type": mediaType,
         "content-encoding": "gzip",
       } }));
     } else {
-      e.respondWith(new Response(gunzip(bytes), { headers: { etag, "content-type": mediaType } }));
+      e.respondWith(new Response(gunzip(bytes), { headers: {
+        etag,
+	"cache-control": cacheControl,
+        "content-type": mediaType
+      } }));
     }
     return;
   }

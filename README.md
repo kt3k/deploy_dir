@@ -54,8 +54,10 @@ which serves the contents of the given directory.
 Options:
   -r, --root <path>           Specifies the root path of the deployed static files. Default is '/'.
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
-  --js                        Output source code as plain JavaScript. Default is false.
+  --ts                        Output source code as TypeScript. Default is false.
   --basic-auth <id:pw>        Performs basic authentication in the deployed site. The credentials are in the form of <user>:<password>
+  --cache                     Specifies the cache control header for specific file paths.
+                              e.g. --cache "/css:max-age=3600,/img:max-age=86400"
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.

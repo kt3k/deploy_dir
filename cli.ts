@@ -1,6 +1,7 @@
 import { parse } from "https://deno.land/std@0.97.0/flags/mod.ts";
 import { red } from "https://deno.land/std@0.97.0/fmt/colors.ts";
 import { readDirCreateSource } from "./mod.ts";
+import { parseCacheOption } from "./util.ts";
 
 const NAME = "deploy_dir";
 const VERSION = "0.3.1";
@@ -17,6 +18,8 @@ Options:
   -o, --output <filename>     Specifies the output filename. If not specified, the tool shows the source code to stdout.
   --ts                        Output source code as TypeScript. Default is false.
   --basic-auth <id:pw>        Performs basic authentication in the deployed site. The credentials are in the form of <user>:<password>
+  --cache                     Specifies the cache control header for specific file paths.
+                              e.g. --cache "/css:max-age=3600,/img:max-age=86400"
   -y, --yes                   Answers yes when the tool ask for overwriting the output.
   -v, --version               Shows the version number.
   -h, --help                  Shows the help message.
@@ -32,6 +35,7 @@ type CliArgs = {
   _: string[];
   version: boolean;
   help: boolean;
+  cache: string;
   root: string;
   output: string;
   ts: boolean;
@@ -43,6 +47,7 @@ export async function main(cliArgs: string[]) {
   const {
     version,
     help,
+    cache,
     root = "/",
     output,
     ts,
@@ -51,7 +56,7 @@ export async function main(cliArgs: string[]) {
     _: args,
   } = parse(cliArgs, {
     boolean: ["help", "version", "ts", "yes"],
-    string: ["root", "output", "basic-auth"],
+    string: ["cache", "root", "output", "basic-auth"],
     alias: {
       h: "help",
       v: "version",
@@ -79,7 +84,10 @@ export async function main(cliArgs: string[]) {
     return 1;
   }
 
+  const cacheRecord = cache ? parseCacheOption(cache) : undefined;
+
   const source = await readDirCreateSource(dir, root, {
+    cache: cacheRecord,
     toJavaScript: !ts,
     basicAuth,
   });
