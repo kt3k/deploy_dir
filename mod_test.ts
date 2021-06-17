@@ -16,10 +16,10 @@ Deno.test("readDirCreateSource", async () => {
 import { decode } from "https://deno.land/std@0.97.0/encoding/base64.ts";
 import { gunzip } from "https://raw.githubusercontent.com/kt3k/compress/bbe0a818d2acd399350b30036ff8772354b1c2df/gzip/gzip.ts";
 console.log("init");
-const dirData: Record<string, [Uint8Array, string, string]> = {};
-dirData["/bar.ts"] = [decode("H4sIAAAAAAAAA0vOzyvOz0nVy8lP11BKSixS0rTmAgCz8kN9FAAAAA=="), "text/typescript", '"aa9bb63fe50cf09a95776fc7dbbd5eb7"'];
-dirData["/foo.txt"] = [decode("H4sIAAAAAAAAA0vLz+cCAKhlMn4EAAAA"), "text/plain", '"4ebd3923247dff92a9b80f2c1ff1caee"'];
-dirData["/index.html"] = [decode("H4sIAAAAAAAAA/NIzcnJV+QCAJ7YQrAHAAAA"), "text/html", '"275c264be2a95c29ac07e6f63e3d016c"'];
+const dirData: Record<string, [Uint8Array, string, string, string]> = {};
+dirData["/bar.ts"] = [decode("H4sIAAAAAAAAA0vOzyvOz0nVy8lP11BKSixS0rTmAgCz8kN9FAAAAA=="), "text/typescript", '"aa9bb63fe50cf09a95776fc7dbbd5eb7"', "private"];
+dirData["/foo.txt"] = [decode("H4sIAAAAAAAAA0vLz+cCAKhlMn4EAAAA"), "text/plain", '"4ebd3923247dff92a9b80f2c1ff1caee"', "private"];
+dirData["/index.html"] = [decode("H4sIAAAAAAAAA/NIzcnJV+QCAJ7YQrAHAAAA"), "text/html", '"275c264be2a95c29ac07e6f63e3d016c"', "private"];
 addEventListener("fetch", (e) => {
   let { pathname } = new URL(e.request.url);
   if (pathname.endsWith("/")) {
@@ -30,7 +30,7 @@ addEventListener("fetch", (e) => {
     data = dirData[pathname + '.html'];
   }
   if (data) {
-    const [bytes, mediaType, etag] = data;
+    const [bytes, mediaType, etag, cacheControl] = data;
     const acceptsGzip = e.request.headers.get("accept-encoding")?.split(/[,;]s*/).includes("gzip");
     if (e.request.headers.get("if-none-match") === etag) {
       e.respondWith(new Response(null, { status: 304, statusText: "Not Modified" }));
@@ -39,11 +39,16 @@ addEventListener("fetch", (e) => {
     if (acceptsGzip) {
       e.respondWith(new Response(bytes, { headers: {
         etag,
+	"cache-control": cacheControl,
         "content-type": mediaType,
         "content-encoding": "gzip",
       } }));
     } else {
-      e.respondWith(new Response(gunzip(bytes), { headers: { etag, "content-type": mediaType } }));
+      e.respondWith(new Response(gunzip(bytes), { headers: {
+        etag,
+	"cache-control": cacheControl,
+        "content-type": mediaType
+      } }));
     }
     return;
   }
@@ -95,9 +100,9 @@ Deno.test("readDirCreateSource with root", async () => {
   assertStringIncludes(
     await readDirCreateSource("testdata", "/root", { gzipTimestamp: 0 }),
     `
-dirData["/root/bar.ts"] = [decode("H4sIAAAAAAAAA0vOzyvOz0nVy8lP11BKSixS0rTmAgCz8kN9FAAAAA=="), "text/typescript", '"aa9bb63fe50cf09a95776fc7dbbd5eb7"'];
-dirData["/root/foo.txt"] = [decode("H4sIAAAAAAAAA0vLz+cCAKhlMn4EAAAA"), "text/plain", '"4ebd3923247dff92a9b80f2c1ff1caee"'];
-dirData["/root/index.html"] = [decode("H4sIAAAAAAAAA/NIzcnJV+QCAJ7YQrAHAAAA"), "text/html", '"275c264be2a95c29ac07e6f63e3d016c"'];
+dirData["/root/bar.ts"] = [decode("H4sIAAAAAAAAA0vOzyvOz0nVy8lP11BKSixS0rTmAgCz8kN9FAAAAA=="), "text/typescript", '"aa9bb63fe50cf09a95776fc7dbbd5eb7"', "private"];
+dirData["/root/foo.txt"] = [decode("H4sIAAAAAAAAA0vLz+cCAKhlMn4EAAAA"), "text/plain", '"4ebd3923247dff92a9b80f2c1ff1caee"', "private"];
+dirData["/root/index.html"] = [decode("H4sIAAAAAAAAA/NIzcnJV+QCAJ7YQrAHAAAA"), "text/html", '"275c264be2a95c29ac07e6f63e3d016c"', "private"];
 `.trim(),
   );
 });
@@ -106,9 +111,9 @@ Deno.test("readDirCreateSource with root 2", async () => {
   assertStringIncludes(
     await readDirCreateSource("testdata", "root", { gzipTimestamp: 0 }),
     `
-dirData["/root/bar.ts"] = [decode("H4sIAAAAAAAAA0vOzyvOz0nVy8lP11BKSixS0rTmAgCz8kN9FAAAAA=="), "text/typescript", '"aa9bb63fe50cf09a95776fc7dbbd5eb7"'];
-dirData["/root/foo.txt"] = [decode("H4sIAAAAAAAAA0vLz+cCAKhlMn4EAAAA"), "text/plain", '"4ebd3923247dff92a9b80f2c1ff1caee"'];
-dirData["/root/index.html"] = [decode("H4sIAAAAAAAAA/NIzcnJV+QCAJ7YQrAHAAAA"), "text/html", '"275c264be2a95c29ac07e6f63e3d016c"'];
+dirData["/root/bar.ts"] = [decode("H4sIAAAAAAAAA0vOzyvOz0nVy8lP11BKSixS0rTmAgCz8kN9FAAAAA=="), "text/typescript", '"aa9bb63fe50cf09a95776fc7dbbd5eb7"', "private"];
+dirData["/root/foo.txt"] = [decode("H4sIAAAAAAAAA0vLz+cCAKhlMn4EAAAA"), "text/plain", '"4ebd3923247dff92a9b80f2c1ff1caee"', "private"];
+dirData["/root/index.html"] = [decode("H4sIAAAAAAAAA/NIzcnJV+QCAJ7YQrAHAAAA"), "text/html", '"275c264be2a95c29ac07e6f63e3d016c"', "private"];
 `.trim(),
   );
 });
