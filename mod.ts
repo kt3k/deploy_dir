@@ -71,9 +71,9 @@ export async function readDirCreateSource(
     let cacheControl = "private";
     if (opts.cache) {
       for (const [path, c] of Object.entries(opts.cache)) {
-	if (name.startsWith(path)) {
+        if (name.startsWith(path)) {
           cacheControl = c;
-	}
+        }
       }
     }
     buf.push(
