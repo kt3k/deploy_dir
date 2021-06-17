@@ -1,4 +1,4 @@
-# deploy_dir v0.2.3
+# deploy_dir v0.3.0
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
 
@@ -16,7 +16,7 @@ audios, high-res images, etc.
 Deno >= 1.10 is recommended.
 
 ```
-deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.2.3/cli.ts
+deno install -qf --allow-read=. --allow-write=. https://deno.land/x/deploy_dir@v0.3.0/cli.ts
 ```
 
 # Usage
@@ -134,6 +134,10 @@ This is because Deno Deploy has
 case, we recommend using
 [proxying technique](https://deno.com/deploy/docs/serve-static-assets) for
 serving static web site.
+
+# History
+
+- 2021-06-17   v0.3.0   Add Etag Support.
 
 # License
 
