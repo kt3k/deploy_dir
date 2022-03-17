@@ -1,3 +1,7 @@
+⚠️ This project is now deprecated.
+
+Deno Deploy now supports [static files](https://deno.com/blog/deploy-static-files). You can retreive static files in your repository by using Deno FS APIs such as `Deno.readFile`, `Deno.readDir`, etc. There is no need of using this tool to host static files in Deno Deploy.
+
 # deploy_dir v0.3.2
 
 [![ci](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml/badge.svg)](https://github.com/kt3k/deploy_dir/actions/workflows/ci.yml)
